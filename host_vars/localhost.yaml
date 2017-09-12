@@ -1,0 +1,14 @@
+---
+zsh_ohmy_theme: 'robbyrussell'
+zsh_ohmy_custom_plugins:
+  - name: zsh-syntax-highlighting
+    repo: "git://github.com/zsh-users/zsh-syntax-highlighting.git"
+  - name: zsh-autosuggestions
+    repo: "git://github.com/zsh-users/zsh-autosuggestions.git"
+zsh_ohmy_plugins:
+  - git
+  - wd
+  - docker
+  - zsh-syntax-highlighting
+  - zsh-autosuggestions
+...

@@ -1,0 +1,65 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  roles:
+#     - { role: vaulttec.zsh } # Install zsh and Oh-my-zsh configuration
+
+  tasks:
+  - name: install packages with homebrew
+    homebrew:
+      name: '{{ item }}'
+      state: present
+    with_items:
+      - python
+      - tree 
+      - ssh-copy-id 
+      - wget 
+      - httpie 
+      - jq
+      - node
+      - terraform
+      - sift
+      - md5sha1sum
+      - pigz
+
+# TODO: Copy sift configuration file to ~/.sift/conf
+
+  - name: update packages to latest with homebrew
+    homebrew:
+      name: '{{ item }}'
+      state: latest
+    with_items:
+      - zsh
+
+  - name: install global ruby gems
+    gem:
+      name: '{{ item }}'
+      state: present
+      user_install: no
+    with_items:
+      - curb
+      - geckoboard-ruby
+
+  - name: install pip packages (present, not latest)
+    pip: name={{ item }} state=present
+    with_items:
+      - awscli
+      - boto 
+      - cfn_flip
+      - elasticstat
+      - certifi # Credential plugin httpie, elasticstat
+      - elasticsearch-curator
+    become: true
+
+  - name: Install node.js packages globally.
+    npm:
+      name: '{{ item }}'
+      global: yes
+    with_items:
+      - node-lambda
+      - nvm
+      - node-gyp # Required for platformio-ide-terminal plugin for Atom
+      - serverless
+
+...
