@@ -1,0 +1,57 @@
+---
+brew_formulas:
+  - bash
+  - bash-completion@2
+  - direnv
+  - fish
+  - gnu-tar
+  - httpie 
+  - jq
+  - md5sha1sum
+  - node
+  - openssl
+  - pigz
+  - potrace
+  - python
+  - rbenv
+  - ripgrep
+  - sift
+  - ssh-copy-id 
+  - terraform
+  - tree 
+  - wget 
+brew_casks:
+  # - 1password
+  - alfred
+  # - ansible-dk
+  - firefox
+  - github
+  - iterm2
+  # - pycharm-ce # Using JetBrains Toolbox instead
+  - sequel-pro
+  - visual-studio-code
+  - visualvm
+  - vitamin-r
+global_ruby_gems:
+  - curb
+  - geckoboard-ruby
+  - travis
+user_ruby_gems:
+  - warp-dir
+pip_packages:
+  # - awscli # Replaced with bundle install via http://docs.aws.amazon.com/cli/latest/userguide/awscli-install-bundle.html
+  - aws-sam-cli
+  - boto
+  - certifi # Credential plugin httpie, elasticstat
+  - cfn_flip
+  - elasticsearch-curator
+  - elasticstat
+  - numpy # System install required for https://pyinstaller.readthedocs.io/en/stable/installation.html#installing-in-mac-os-x for f-engrave
+  - pyqt # System install required for https://pyinstaller.readthedocs.io/en/stable/installation.html#installing-in-mac-os-x for f-engrave
+  - virtualenvwrapper
+npm_packages:
+  - node-gyp # Required for platformio-ide-terminal plugin for Atom
+  - node-lambda
+  - nvm
+  - serverless
+...

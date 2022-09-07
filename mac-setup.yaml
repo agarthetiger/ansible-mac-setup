@@ -1,65 +1,57 @@
 ---
-- hosts: localhost
+- hosts: all
   connection: local
-  gather_facts: false
-  roles:
-#     - { role: vaulttec.zsh } # Install zsh and Oh-my-zsh configuration
-
+  gather_facts: true
   tasks:
   - name: install packages with homebrew
     homebrew:
       name: '{{ item }}'
+      state: latest
+      update_homebrew: yes
+    loop: 
+      - '{{ brew_formulas }}'
+    tags:
+      - homebrew
+      - formulas
+
+  - name: install homebrew casks
+    homebrew_cask:
+      name: "{{ item }}"
       state: present
-    with_items:
-      - python
-      - tree 
-      - ssh-copy-id 
-      - wget 
-      - httpie 
-      - jq
-      - node
-      - terraform
-      - sift
-      - md5sha1sum
-      - pigz
+    loop: "{{ brew_casks }}"
+    tags:
+      - homebrew
+      - casks
 
 # TODO: Copy sift configuration file to ~/.sift/conf
-
-  - name: update packages to latest with homebrew
-    homebrew:
-      name: '{{ item }}'
-      state: latest
-    with_items:
-      - zsh
 
   - name: install global ruby gems
     gem:
       name: '{{ item }}'
       state: present
       user_install: no
-    with_items:
-      - curb
-      - geckoboard-ruby
+    loop: "{{ global_ruby_gems }}"
+    become: true  
+
+  - name: install user ruby gems
+    gem:
+      name: '{{ item }}'
+      state: present
+      user_install: yes
+    loop: "{{ user_ruby_gems }}"
 
   - name: install pip packages (present, not latest)
     pip: name={{ item }} state=present
-    with_items:
-      - awscli
-      - boto 
-      - cfn_flip
-      - elasticstat
-      - certifi # Credential plugin httpie, elasticstat
-      - elasticsearch-curator
+    loop: "{{ pip_packages }}"
     become: true
 
   - name: Install node.js packages globally.
     npm:
       name: '{{ item }}'
       global: yes
-    with_items:
-      - node-lambda
-      - nvm
-      - node-gyp # Required for platformio-ide-terminal plugin for Atom
-      - serverless
+    loop: "{{ npm_packages }}"
 
+#  - handlers:
+#    - restart SystemUIServer
+#      command: killall SystemUIServer
 ...
