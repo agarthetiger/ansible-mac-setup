@@ -1,0 +1,166 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: yes
+  # debugger: on_failed
+  roles:
+    - diodonfrost.p10k
+      # tags:
+      #   - roles
+  tasks:
+    - debug:
+        var: "{{ ansible_facts }}"
+        verbosity: 2
+
+    - homebrew_tap:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ homebrew_taps }}"
+      when:
+        - homebrew_taps is defined
+      tags:
+        - homebrew
+        - homebrew_taps
+        - homebrew_taps_install
+        - install
+
+    - name: update all currently installed homebrew formulas to latest version
+      homebrew:
+        update_homebrew: yes
+        upgrade_all: yes
+      when:
+        - update_all_packages is defined
+        - update_all_packages | bool
+      register: homebrew_formula_update
+      tags:
+        - homebrew_formula_update
+
+    - name: update all currently installed homebrew casks to latest version
+      homebrew_cask:
+        update_homebrew: yes
+        upgrade_all: yes
+      when:
+        - update_all_packages is defined
+        - update_all_packages | bool
+      register: homebrew_cask_update
+      tags:
+        - homebrew_casks_update
+
+    - name: update all ruby gems to latest versions and install new gems
+      gem:
+        name: "{{ item }}"
+        state: latest
+      loop: "{{ ruby_gems }}"
+      when:
+        - update_all_packages is defined
+        - update_all_packages | bool
+        - ruby_gems is defined
+      register: ruby_gem_update
+      tags:
+        - ruby_gems_update
+
+    - name: install native applications with homebrew cask
+      homebrew_cask:
+        name: "{{ item }}"
+        state: present
+        install_options: 'appdir=/Applications'
+      loop: "{{ homebrew_casks }}"
+      when:
+        - update_all_packages is undefined or update_all_packages == false
+        - homebrew_casks is defined
+        - homebrew_cask_update is undefined or homebrew_cask_update.skipped == true
+      tags:
+        - homebrew
+        - homebrew_casks
+        - homebrew_casks_install
+        - install
+      debugger: on_skipped
+
+    - name: remove homebrew casks if defined
+      homebrew_cask:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ remove_homebrew_casks }}"
+      when: remove_homebrew_casks is defined
+      tags:
+        - homebrew
+        - homebrew_casks
+        - homebrew_casks_remove
+        - remove
+
+    - name: install software with homebrew formulas
+      homebrew:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ homebrew_formulas }}"
+      when:
+        - homebrew_formulas is defined
+        - homebrew_formula_update is undefined or homebrew_formula_update.skipped == true
+      tags:
+        - homebrew
+        - homebrew_formulas
+        - homebrew_formulas_install
+        - install
+
+    - name: remove homebrew formulas if defined
+      homebrew:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ remove_homebrew_formulas }}"
+      when: remove_homebrew_formulas is defined
+      tags:
+        - homebrew
+        - homebrew_formulas
+        - homebrew_formulas_remove
+        - remove
+
+    - name: install ruby gems
+      gem:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ ruby_gems }}"
+      when:
+        - update_all_packages is undefined or update_all_packages == false
+        - ruby_gems is defined
+        - ruby_gem_update is undefined or ruby_gem_update.changed == false
+      tags:
+        - ruby
+        - ruby_gems
+        - ruby_gems_install
+        - install
+
+    - name: remove ruby gems if defined
+      gem:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ ruby_gems }}"
+      when: remove_ruby_gems is defined
+      tags:
+        - ruby
+        - ruby_gems
+        - ruby_gems_remove
+        - remove
+
+    - name: install pip modules (default OS python/pip version)
+      pip:
+        name: "{{ item }}"
+        extra_args: --user
+        # executable: pip3
+      loop: "{{ pip_modules }}"
+      when: pip_modules is defined
+      tags:
+        - pip
+        - pip_install
+        - install
+
+    - name: Install python packages with pipx
+      community.general.pipx:
+        name: "{{ item }}"
+        executable: /opt/homebrew/bin/pipx
+      loop: "{{ pipx_packages }}"
+      when: pipx_packages is defined
+      tags:
+        - pipx
+        - pipx_install
+        - install
+...

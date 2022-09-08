@@ -1,0 +1,79 @@
+update_all_packages: no
+homebrew_casks:
+  - 1password
+  - drawio
+  - iterm2
+  - insomnia
+  - karabiner-elements
+  # - kitematic
+  # - macpass
+  # - minikube
+  # - slack
+  # - sourcetree
+  - the-unarchiver
+  - visual-studio-code # Might have installed this twice now... :(
+homebrew_formulas:
+  # - ack
+  # - ansible-lint
+  - bat # alternative to cat
+  # - bash-completion@2
+  - derailed/k9s/k9s
+  - docker-compose # For use with podman
+  - dog # alternative to dig
+  - duf # alternative to du/df
+  - git
+  - glances
+  - gnu-tar
+  - go
+  # - groovysdk
+  - htop
+  - httpie
+  - jq
+  - lsd # alternative to ls
+  - md5sha1sum
+  - neofetch # display system information
+  - openssl
+  - packer
+  - pigz
+  - podman
+  - procs # alternative to ps
+  - pv
+  # - python # python3
+  # - ripgrep
+  - sha2
+  - ssh-copy-id
+  # - sift
+  - terraform
+  - terragrunt
+  - tree
+  - wget
+homebrew_taps:
+  # - kreuzwerker/taps/m1-terraform-provider-helper # M1 MacOS support for terraform provider
+  # - elastic/tap
+# pip_modules:
+#   - ansible-lint
+#   - ansible-review
+#   - autopep8
+#   - doc8 # Required for VS Code plugin lextudio.restructuredtext
+#   - docutils # Required for VS Code plugin lextudio.restructuredtext
+#   - molecule # Currently failing, possibly because these are installing for the system version of Python (2)?
+#   - molecule[docker] # Required by molecule
+#   - pep8
+#   - pygments # Required for VS Code plugin lextudio.restructuredtext
+#   - python-vagrant # Required by molecule
+#   - pyyaml
+#   - virtualenv
+#   - virtualenvwrapper
+pipx_packages:
+  - boto
+  - hint-cli
+# remove_homebrew_casks:
+#   - docker # Unknown issues, but Docker would hang on startup. May be worth trying again with Docker >v2.0.0.3
+#   - docker-toolbox # Docker would hang on startup due to VS Code having the folder ~/ open. Docker Desktop installed via DMG instead.
+#   - alfred # Didn't work, no Alfred app installed. Installed via App Store instead.
+#   - remote-desktop-manager-free # This is not the app you're looking for
+# remove_homebrew_formulas:
+#   - mkdocs
+# ruby_gems:
+#   - bundler
+#   - warp-dir
