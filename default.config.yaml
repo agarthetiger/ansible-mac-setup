@@ -1,6 +1,6 @@
 update_all_packages: no
 homebrew_casks:
-  - 1password
+  - docker
   - drawio
   - iterm2
   - insomnia
@@ -11,13 +11,14 @@ homebrew_casks:
   # - slack
   # - sourcetree
   - the-unarchiver
-  - visual-studio-code # Might have installed this twice now... :(
+  # - visual-studio-code # Might have installed this twice now... :(
 homebrew_formulas:
   # - ack
   # - ansible-lint
   - bat # alternative to cat
   # - bash-completion@2
   - derailed/k9s/k9s
+  #  - docker Install via cask instead to include the docker daemon
   - docker-compose # For use with podman
   - dog # alternative to dig
   - duf # alternative to du/df
@@ -47,7 +48,7 @@ homebrew_formulas:
   - terragrunt
   - tree
   - wget
-homebrew_taps:
+# homebrew_taps:
   # - kreuzwerker/taps/m1-terraform-provider-helper # M1 MacOS support for terraform provider
   # - elastic/tap
 # pip_modules:
@@ -72,8 +73,26 @@ pipx_packages:
 #   - docker-toolbox # Docker would hang on startup due to VS Code having the folder ~/ open. Docker Desktop installed via DMG instead.
 #   - alfred # Didn't work, no Alfred app installed. Installed via App Store instead.
 #   - remote-desktop-manager-free # This is not the app you're looking for
-# remove_homebrew_formulas:
-#   - mkdocs
+remove_homebrew_formulas:
+  - docker
 # ruby_gems:
 #   - bundler
 #   - warp-dir
+
+# For geerlingguy.mac.mas
+# After mas is installed, run mas search <name> to find the id and name of apps to install
+mas_installed_apps:
+  - { id: 1176895641, name: "Spark - Email App by Readdle" }
+  - { id: 1333542190, name: "1Password 7 - Password Manager" }
+  - { id: 1000808993, name: "Coca" }
+  - { id: 441258766, name: "Magnet" }
+  - { id: 1289197285, name: "MindNode – Mind Map & Outline" }
+  - { id: 784801555, name: "Microsoft OneNote" }
+  # - { id: 967004861, name: "HP Easy Scan" } For home printer scanner
+  # - { id: 1354318707, name: "Core Tunnel" } Recommended replacement for SSH Tunnel app
+mas_uninstalled_apps:
+  - { id: 408981434, name: "iMovie" }
+  - { id: 409183694, name: "Keynote" }
+  - { id: 409201541, name: "Pages" }
+  - { id: 409203825, name: "Numbers" }
+  - { id: 682658836, name: "GarageBand" }
