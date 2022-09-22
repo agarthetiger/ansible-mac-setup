@@ -1,12 +1,23 @@
 ---
-- hosts: localhost
-  connection: local
-  gather_facts: yes
-  # debugger: on_failed
+- hosts: all
+  vars_files:
+    - default.config.yaml
+
+
+  pre_tasks:
+    - name: Include playbook configuration.
+      include_vars: "{{ item }}"
+      with_fileglob:
+        - "{{ playbook_dir }}/config.yml"
+      tags: ['always']
+
+
   roles:
-    - diodonfrost.p10k
-      # tags:
-      #   - roles
+    - role: diodonfrost.p10k
+      tags: ['roles', 'p10k', 'never']
+    - role: geerlingguy.mac.mas
+      tags: ['roles', 'mas', 'never']
+
   tasks:
     - debug:
         var: "{{ ansible_facts }}"
@@ -156,11 +167,20 @@
     - name: Install python packages with pipx
       community.general.pipx:
         name: "{{ item }}"
-        executable: /opt/homebrew/bin/pipx
+        executable: /usr/local/bin/pipx
       loop: "{{ pipx_packages }}"
       when: pipx_packages is defined
       tags:
         - pipx
         - pipx_install
         - install
+
+    - name: Ensure terminal plist preferences are set (file copy)
+      ansible.builtin.copy:
+        src: files/com.apple.Terminal.plist
+        dest: ~/Library/Preferences/com.apple.Terminal.plist
+        owner: "{{ ansible_user_id }}"
+        mode: '0600'
+      tags:
+        - terminal
 ...
